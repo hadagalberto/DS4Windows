@@ -48,6 +48,11 @@ namespace DS4Windows.InputDevices
             public new const int LY = InputReportDataBytes.LY + REPORT_OFFSET;
         }
 
+        private byte IntToByte(int value)
+        {
+            return (byte)value;
+        }
+
         public struct TriggerEffectData
         {
             public byte triggerMotorMode;
@@ -64,12 +69,22 @@ namespace DS4Windows.InputDevices
                 switch (effect)
                 {
                     case TriggerEffects.None:
-                        triggerMotorMode = triggerStartResistance = triggerEffectForce =
-                            triggerRangeForce = triggerNearReleaseStrength = triggerNearMiddleStrength =
-                            triggerPressedStrength = triggerActuationFrequency = 0;
+                        int tempStartResValue = Math.Max((int)effectSettings.maxValue, 0);
+                        //Debug.WriteLine(tempStartResValue);
+                        triggerMotorMode = 0x2 | 0x20 | 0x04;
+                        //triggerStartResistance = 0x94;
+                        triggerStartResistance = (byte)90;
+                        //triggerEffectForce = 0xB4;
+                        triggerEffectForce = (byte)23;
+                        //Debug.WriteLine(triggerEffectForce);
+                        triggerRangeForce = (byte)0;
+                        triggerNearReleaseStrength = (byte)0;
+                        triggerNearMiddleStrength = (byte)0;
+                        triggerPressedStrength = (byte)255;
+                        triggerActuationFrequency = (byte)11;
                         break;
                     case TriggerEffects.FullClick:
-                        int tempStartResValue = Math.Max((int)effectSettings.maxValue, 0);
+                        tempStartResValue = Math.Max((int)effectSettings.maxValue, 0);
                         //Debug.WriteLine(tempStartResValue);
                         triggerMotorMode = 0x02;
                         //triggerStartResistance = 0x94;
